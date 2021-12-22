@@ -24,7 +24,6 @@ Route::post('/', function () {
     return view('master');
  });
 
-// Route::post('miJqueryAjax','App\Http\Controllers\AjaxController@index');
 Route::post('miJqueryAjax',function(){
-    return App::call('App\Http\Controllers\AjaxController@index' , ['urlNico' => $_POST['urlNico']]);
+    return App::call('App\Http\Controllers\AjaxController@index' , ['inUrl' => $_POST['inUrl']]);
 });
