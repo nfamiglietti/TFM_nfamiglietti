@@ -13,10 +13,35 @@ use Illuminate\Support\Facades\Http;
       */
 
     
-
+    public function comprobarUrl($url){
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_NOBODY, true);
+        $result = curl_exec($curl);
+        if ($result !== false)
+        {
+            $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);  
+            if ($statusCode == 404)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
     public function index($inUrl)
      {
         $ListUrl = array();
+        if (!$this->comprobarUrl($inUrl)) {
+            $array = ["grade"=> "error", "state"=>"is a not valid URL" , "url"=>$inUrl, "api" => "Error"] ;
+            array_push($ListUrl, $array);
+            return $ListUrl;
+        }
         $urlObs = "https://http-observatory.security.mozilla.org/api/v1/analyze?host=";
         $response = Http::get($urlObs.$inUrl);
         if ($response->successful()){
@@ -33,7 +58,7 @@ use Illuminate\Support\Facades\Http;
             array_push($ListUrl, $array);
         }
         
-        //otra api
+        //siteCheck
         $array = [];
         $urlSecuri = "https://sitecheck.sucuri.net/api/v3/?scan=";
         $response = Http::get($urlSecuri.$inUrl);
@@ -59,4 +84,6 @@ use Illuminate\Support\Facades\Http;
 
         return $ListUrl;
      }
+
+    
  } 
