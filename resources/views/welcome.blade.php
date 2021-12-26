@@ -80,7 +80,7 @@
                     $(".table_url_inspect tbody").append(rows);
                   }
                   else {
-                    console.log('sin respuesta');
+                    console.log('not response');
                   }
                },
                statusCode: {
